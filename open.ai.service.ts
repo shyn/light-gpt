@@ -43,20 +43,18 @@ export const chatWithGptTurbo = async (
 };
 
 export const chatWithGptTurboByProxy = async (
-    messages: IMessage[],
+    message: string,
     controller: AbortController
 ) => {
     try {
-        const res = await fetch(`/api/chat_with_gpt_by_proxy`, {
+        const res = await fetch(`/api/chat_third_proxy`, {
             method: 'POST',
             body: JSON.stringify({
-                messages: messages.map((item) => ({
-                    role: item.role,
-                    content: item.content,
-                })),
+                message: message,
             }),
             signal: controller.signal,
         }).then(async (response) => {
+            console.log('响应--', response);
             if (!response.ok) {
                 const text = await response.text();
                 console.log('错误--', text, typeof text);
@@ -64,7 +62,7 @@ export const chatWithGptTurboByProxy = async (
             }
             return response;
         });
-        return new Response(parseOpenAIStream(res));
+        return res;
     } catch (error) {
         throw error;
     }

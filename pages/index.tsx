@@ -294,7 +294,7 @@ export default function Home() {
             // user api key
             if (!apiKey) {
                 response = await chatWithGptTurboByProxy(
-                    latestMessageLimit3,
+                    currentUserMessage,
                     controller.current
                 );
             } else {
@@ -319,12 +319,14 @@ export default function Home() {
             // 循环读取数据
             while (true) {
                 const { done, value } = await reader.read();
+                console.log('done, value', done, value);
                 if (done) {
                     break;
                 }
                 // 处理读取到的数据块
                 if (value) {
                     let char = decoder.decode(value);
+                    console.log('字符串--', char);
                     if (
                         char === `\n` &&
                         newCurrentAssistantMessage.endsWith(`\n`)
@@ -560,30 +562,7 @@ export default function Home() {
                 ))}
             </div>
             <div className={styles.header}>
-                <div
-                    className={styles.title}
-                    onClick={async () => {
-                        console.log('发请求--');
-                        fetch('/api/chat_proxy', {
-                            headers: {
-                                'Content-Type': 'application/json',
-                            },
-                            method: 'POST',
-                            body: JSON.stringify({
-                                model: 'gpt-3.5-turbo',
-                                temperature: 0.6,
-                                stream: true,
-                                messages: [
-                                    {
-                                        role: ERole.user,
-                                        content:
-                                            '如何用Node.js写一个简单的服务器',
-                                    },
-                                ],
-                            }),
-                        });
-                    }}
-                >
+                <div className={styles.title}>
                     <span className={styles.item}>Light</span>
                     <span className={styles.item}>GPT</span>
                 </div>

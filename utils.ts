@@ -12,6 +12,7 @@ export const parseOpenAIStream = (rawResponse: Response) => {
             const streamParser = (event: ParseEvent | ReconnectInterval) => {
                 if (event.type === 'event') {
                     const data = event.data;
+                    console.log('解析数据--', data);
                     if (data === '[DONE]') {
                         controller.close();
                         return;
@@ -30,6 +31,7 @@ export const parseOpenAIStream = (rawResponse: Response) => {
             try {
                 while (true) {
                     const { done, value } = await reader.read();
+                    console.log('读值--', value);
                     if (done) {
                         break;
                     }

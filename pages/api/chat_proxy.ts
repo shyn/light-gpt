@@ -18,6 +18,11 @@ const apiProxy = createProxyMiddleware({
         proxyReq.setHeader('Content-Type', 'application/json');
         proxyReq.setHeader('Authorization', `Bearer ${apiKey}'`);
 
+        console.log(
+            '代理请求的请求头--',
+            JSON.stringify(proxyReq.getHeaders())
+        );
+
         proxyReq.write(requestBodyJson);
 
         proxyReq.end();
