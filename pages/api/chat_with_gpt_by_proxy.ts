@@ -26,9 +26,9 @@ export default async function handler(
             timeout: 8000,
             body: JSON.stringify({
                 model: 'gpt-3.5-turbo',
-                messages: postData.messages,
                 temperature: 0.6,
                 stream: true,
+                messages: postData.messages,
             }),
         };
 
@@ -42,17 +42,6 @@ export default async function handler(
                 return;
             }
 
-            // if (proxyRes.headers.get('transfer-encoding') === 'chunked') {
-            //     res.setHeader('Transfer-Encoding', 'chunked');
-            //     const proxyResContentType =
-            //         proxyRes.headers.get('content-type') ||
-            //         'application/octet-stream';
-            //     res.setHeader('Content-Type', proxyResContentType);
-            //     proxyRes.body?.pipe(res);
-            // } else {
-            //     const body = await proxyRes.arrayBuffer();
-            //     res.status(proxyRes.status).send(body);
-            // }
             proxyRes.body.on('data', (chunk) => {
                 // Real-time writing data into the response stream and sending it to the client.
                 res.write(chunk);
@@ -69,3 +58,15 @@ export default async function handler(
         res.status(405).end();
     }
 }
+
+// if (proxyRes.headers.get('transfer-encoding') === 'chunked') {
+//     res.setHeader('Transfer-Encoding', 'chunked');
+//     const proxyResContentType =
+//         proxyRes.headers.get('content-type') ||
+//         'application/octet-stream';
+//     res.setHeader('Content-Type', proxyResContentType);
+//     proxyRes.body?.pipe(res);
+// } else {
+//     const body = await proxyRes.arrayBuffer();
+//     res.status(proxyRes.status).send(body);
+// }

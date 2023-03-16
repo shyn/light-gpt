@@ -225,14 +225,14 @@ export default function Home() {
     const [serviceErrorMessage, setServiceErrorMessage] = useState('');
 
     const chatGPTTurboWithLatestUserPrompt = async (isRegenerate = false) => {
-        if (!apiKey) {
-            toast.error('Please set API KEY', {
-                autoClose: 3000,
-            });
-            setSystemMenuVisible(true);
-            setActiveSystemMenu(SystemSettingMenu.apiKeySettings);
-            return;
-        }
+        // if (!apiKey) {
+        //     toast.error('Please set API KEY', {
+        //         autoClose: 3000,
+        //     });
+        //     setSystemMenuVisible(true);
+        //     setActiveSystemMenu(SystemSettingMenu.apiKeySettings);
+        //     return;
+        // }
 
         // 先把用户输入信息展示到对话列表
         if (!isRegenerate && !currentUserMessage) {
@@ -284,17 +284,26 @@ export default function Home() {
         userPromptRef.current.style.height = 'auto';
         scrollSmoothThrottle();
 
+        let response: Response;
+
         try {
             setServiceErrorMessage('');
             setLoading(true);
             controller.current = new AbortController();
 
             // user api key
-            const response = await chatWithGptTurbo(
-                apiKey,
-                latestMessageLimit3,
-                controller.current
-            );
+            if (!apiKey) {
+                response = await chatWithGptTurboByProxy(
+                    latestMessageLimit3,
+                    controller.current
+                );
+            } else {
+                response = await chatWithGptTurbo(
+                    apiKey,
+                    latestMessageLimit3,
+                    controller.current
+                );
+            }
 
             if (!response.ok) {
                 throw new Error(response.statusText);
@@ -551,7 +560,30 @@ export default function Home() {
                 ))}
             </div>
             <div className={styles.header}>
-                <div className={styles.title} onClick={async () => {}}>
+                <div
+                    className={styles.title}
+                    onClick={async () => {
+                        console.log('发请求--');
+                        fetch('/api/chat_proxy', {
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
+                            method: 'POST',
+                            body: JSON.stringify({
+                                model: 'gpt-3.5-turbo',
+                                temperature: 0.6,
+                                stream: true,
+                                messages: [
+                                    {
+                                        role: ERole.user,
+                                        content:
+                                            '如何用Node.js写一个简单的服务器',
+                                    },
+                                ],
+                            }),
+                        });
+                    }}
+                >
                     <span className={styles.item}>Light</span>
                     <span className={styles.item}>GPT</span>
                 </div>
