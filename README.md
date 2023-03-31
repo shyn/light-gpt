@@ -6,6 +6,8 @@ Github: https://github.com/riwigefi/light-gpt
 
 Demo: https://light-gpt.vercel.app
 
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Friwigefi%2Flight-gpt)
+
 ## Features
 
 1. A pure front-end application based on the GPT-3.5-Turbo model, using API KEY to request OpenAI's dialogue interface in the front-end, supporting streaming data, and displaying robot replies on the webpage in a typewriter effect.
@@ -81,6 +83,8 @@ Light-GPT 是一个基于 GPT-3.5-Turbo 模型的交互式网站项目，使用 
 Github 代码库: https://github.com/riwigefi/light-gpt
 
 演示站点: https://light-gpt.vercel.app
+
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Friwigefi%2Flight-gpt)
 
 ## 功能
 
